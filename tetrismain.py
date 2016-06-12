@@ -506,6 +506,7 @@ class Board():
 		# 			block = self.grid.pop((x,y)) #removed and saved
 		# 			block.move(0, 1)
 		# 			self.grid[(x,y+1)] = block
+
 		for n in range(0, y_start):
 			y = y_start - n
 			for x in range(0, self.width):
@@ -513,7 +514,6 @@ class Board():
 					popblock = self.grid.pop((x, y))
 					popblock.move(0, 1)
 					self.grid[(x, y + 1)] = popblock
-
 	
 	def remove_complete_rows(self):
 		''' removes all the complete rows
@@ -526,9 +526,10 @@ class Board():
 		'''
 		
 		#YOUR CODE HERE
-		if self.is_row_complete(19):
-			self.delete_row(19)
-			self.move_down_rows(18)
+		for y in range(0, self.height):
+			if self.is_row_complete(y):
+				self.delete_row(y)
+				self.move_down_rows(y - 1)
 
 	def game_over(self):
 		''' display "Game Over !!!" message in the center of the board
@@ -665,7 +666,8 @@ class Tetris():
 		'''
 		
 		#YOUR CODE HERE
-		self.current_shape.rotate(self.board)
+		if self.current_shape.can_rotate(self.board):
+			self.current_shape.rotate(self.board)
 	
 	def key_pressed(self, event):
 		''' this function is called when a key is pressed on the keyboard
