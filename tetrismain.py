@@ -34,7 +34,7 @@ class Block(Rectangle):
 						dy - type: int
 
 			Return value: type: bool
-						
+			adfa			
 			checks if the block can move dx squares in the x direction
 			and dy squares in the y direction
 			Returns True if it can, and False otherwise
