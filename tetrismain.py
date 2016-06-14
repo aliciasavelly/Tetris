@@ -40,7 +40,7 @@ class Block(Rectangle):
 			Returns True if it can, and False otherwise
 			HINT: use the can_move method on the Board object
 		'''
-		#YOUR CODE HERE
+		#YOUR CODE HEREadfas
 		# print "block can move?"
 		return board.can_move(self.x + dx, self.y + dy)
 
