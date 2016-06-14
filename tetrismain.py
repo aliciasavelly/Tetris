@@ -198,19 +198,25 @@ class Shape():
 		for block in new_blocks:
 			# block.x = center.x - rotatedir*center.y + rotatedir.block.y
 			# block.y = center.y + rotatedir*center.x + rotatedir.block.x
-			if not board.can_move(block.getX(), block.getY()):
-				IS_OCCUPIED = False
-				for est in self.blocks:
-					if block.getX() == est.x and block.getY() == est.y:
-						IS_OCCUPIED = True
-				if not IS_OCCUPIED:
-					return False
+			if block.getY() > 0: # if block is past first row
+				if not board.can_move(block.getX(), block.getY()): #if block
+					IS_OCCUPIED = False
+					for position in self.blocks:
+						if block.getX() == position.x and block.getY() == position.y:
+							IS_OCCUPIED = True
+					if not IS_OCCUPIED:
+						return False
+			elif block.getY() == 0:
+				return True
 				# print center.x - rotatedir*center.y + rotatedir*block.y
 				# print center.y + rotatedir*center.x + rotatedir*block.x
 				# print "block can't rotate"
 				# return False
 		print "shape can rotate"
 		return True
+
+		# NEED TO FIX ThIS
+		# the piece you're positioning will be set but still a second where you can rotate it before the next piece moves down
 
 
 
@@ -581,11 +587,12 @@ class Tetris():
 		# Draw the current_shape on the board (take a look at the
 		# draw_shape method in the Board class)
 		####  YOUR CODE HERE ####
+		self.animate_shape()
 		self.board.draw_shape(self.current_shape)
 
 		# For Step 9:  animate the shape!
 		####  YOUR CODE HERE ####
-		self.animate_shape()
+		# self.animate_shape()
 
 
 	def create_new_shape(self):
@@ -629,10 +636,14 @@ class Tetris():
 		#YOUR CODE HERE
 		dx = self.DIRECTION[direction][0]
 		dy = self.DIRECTION[direction][1]
+		# if direction == "space":
+		# 	while self.current_shape.can_move(self.board, 0, 1):
+		# 		self.current_shape.move(0, 1)
+		# 	self.board.add_shape(self.current_shape)
 		if self.current_shape.can_move(self.board, dx, dy):
 			self.current_shape.move(dx, dy)
 			return True
-		elif direction == "Down":
+		elif direction == "Down" or direction == "space":
 			self.board.add_shape(self.current_shape)
 			self.board.remove_complete_rows()
 			self.current_shape = self.create_new_shape()
@@ -666,8 +677,8 @@ class Tetris():
 		'''
 		
 		#YOUR CODE HERE
-		if self.current_shape.can_rotate(self.board):
-			self.current_shape.rotate(self.board)
+		if self.current_shape.can_move(self.board, 0, 1) and self.current_shape.can_rotate(self.board):
+				self.current_shape.rotate(self.board)
 	
 	def key_pressed(self, event):
 		''' this function is called when a key is pressed on the keyboard
@@ -692,7 +703,7 @@ class Tetris():
 		# 	self.current_shape.move(-1, 0)
 		# if key == "Right":
 		# 	self.current_shape.move(1, 0)
-		if key == "Down" or key == "Right" or key == "Left" or key == "space":
+		if key == "Down" or key == "Right" or key == "Left":
 			# print self.DIRECTION[key][0]
 			# print type(self.DIRECTION[key][0])
 			# print self.DIRECTION[key][1]
@@ -701,9 +712,9 @@ class Tetris():
 		if key == "Up":
 			self.do_rotate()
 		if key == "space":
-			self.do_move(key)
+			# self.do_move(key)
 			while self.current_shape.can_move(self.board, 0, 1):
-				self.current_shape.move(0, 1)
+				self.do_move(key)
 			self.board.add_shape(self.current_shape)
 		# if key == "space":
 		# 	self.current_shape.move(0, )
