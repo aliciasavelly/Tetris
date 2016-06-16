@@ -1,6 +1,8 @@
 from graphics import *
 import random
 
+DELAY = 550 #ms before block moves down one space
+
 ############################################################
 # BLOCK CLASS
 ############################################################
@@ -37,7 +39,6 @@ class Block(Rectangle):
 			checks if the block can move dx squares in the x direction
 			and dy squares in the y direction
 			Returns True if it can, and False otherwise
-			HINT: use the can_move method on the Board object
 		'''
 
 		#### MY CODE HERE ####
@@ -88,8 +89,7 @@ class Shape():
 	def draw(self, win):
 		''' Parameter: win - type: CanvasFrame
 
-			Draws the shape:
-			i.e. draws each block
+			Draws the shape (draws four blocks in form of shape)
 		''' 
 
 		for block in self.blocks:
@@ -127,7 +127,6 @@ class Shape():
 
 	def get_rotation_dir(self):
 		''' Return value: type: int
-		
 			returns the current rotation direction
 		'''
 
@@ -207,10 +206,7 @@ class Shape():
 	def rotate(self, board):
 		''' Parameters: board - type: Board object
 
-			rotates the shape:
-			1. Get the rotation direction using the get_rotation_dir method
-			2. Compute the position of each block after rotation
-			3. Move the block to the new position
+			rotates the shape
 		'''    
 
 		####  MY CODE HERE ####
@@ -223,7 +219,7 @@ class Shape():
 
 			self.blocks[index].move(xnew - x, ynew - y)
 		
-		### This should be at the END of your rotate code. DO NOT touch it. Default behavior is that a piece will only shift rotation direction after a successful rotation. This ensures that  pieces which switch rotations definitely remain within their accepted rotation positions.
+		###  This ensures that  pieces which switch rotations definitely remain within their accepted rotation positions.
 		if self.shift_rotation_dir:
 			self.rotation_dir *= -1
 
@@ -374,10 +370,8 @@ class Board():
 			1. check if it is ok to move to square x,y
 			if the position is outside of the board boundaries, can't move there
 			return False
-
 			2. if there is already a block at that postion, can't move there
 			return False
-
 			3. otherwise return True
 		'''
 			
@@ -403,11 +397,7 @@ class Board():
 		''' Parameters: y - type:int
 
 			remove all the blocks in row y
-			to remove a block you must remove it from the grid
-			and erase it from the screen.
-			If you dont remember how to erase a graphics object
-			from the screen, take a look at the Graphics Library
-			handout
+			removes it from the grid and from the window
 		'''
 		
 		#### MY CODE HERE ####
@@ -421,7 +411,7 @@ class Board():
 			Return value: type: bool
 
 			for each block in row y
-			check if there is a block in the grid (use the in operator) 
+			check if there is a block in the grid
 			if there is one square that is not occupied, return False
 			otherwise return True
 		'''
@@ -472,7 +462,6 @@ class Board():
 
 	def game_over(self):
 		''' display "Game Over !!!" message in the center of the board
-			HINT: use the Text class from the graphics library
 		'''
 		
 		#### MY CODE HERE ####
@@ -507,7 +496,6 @@ class Tetris():
 	def __init__(self, win):
 		self.board = Board(win, self.BOARD_WIDTH, self.BOARD_HEIGHT)
 		self.win = win
-		self.delay = 1000 #ms
 		self.win.bind_all('<Key>', self.key_pressed)
 		self.current_shape = self.create_new_shape()
 
@@ -518,8 +506,7 @@ class Tetris():
 	def create_new_shape(self):
 		''' Return value: type: Shape
 			
-			Create a random new shape that is centered
-			 at y = 0 and x = int(self.BOARD_WIDTH/2)
+			Create a random new shape
 			return the shape
 		'''
 		
@@ -534,7 +521,7 @@ class Tetris():
 		'''
 		
 		self.do_move('Down')
-		self.win.after(self.delay, self.animate_shape)
+		self.win.after(DELAY, self.animate_shape)
 	
 	def do_move(self, direction):
 		''' Parameters: direction - type: string
@@ -551,7 +538,6 @@ class Tetris():
 		'''
 		
 		#### MY CODE HERE ####
-
 		dx = self.DIRECTION[direction][0]
 		dy = self.DIRECTION[direction][1]
 
@@ -577,21 +563,16 @@ class Tetris():
 	
 	def key_pressed(self, event):
 		''' this function is called when a key is pressed on the keyboard
-			it currenly just prints the value of the key
 
-			Modify the function so that if the user presses the arrow keys
-			'Left', 'Right' or 'Down', the current_shape will move in
-			the appropriate direction
+			if users presses keys: 'Left', 'Right' or 'Down', the current_shape will move in the appropriate direction
 
-			if the user presses the space bar 'space', the shape will move
-			down until it can no longer move and is added to the board
+			if user presses the space bar 'space', the shape will move down until it can no longer move and is added to the board
 
 			if the user presses the 'Up' arrow key ,
-				the shape should rotate.
+				the shape rotates
 		'''
 			
 		#### MY CODE HERE ####
-
 		key = event.keysym
 		if key == "Down" or key == "Right" or key == "Left":
 			self.do_move(key)
